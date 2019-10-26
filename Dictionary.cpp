@@ -5,8 +5,18 @@ using namespace std;
 
 
 void Dictionary::bulkInsert(int n, string *keys) {
-// TODO:: Write this.
+checksum = false;
+srand(time(NULL));
+while(checksum == false){
+    generateH(random());
+    insert_using_H(keys);
+    checkSum();
+}
+secondHash();
+}
 
+void Dictionary::generateH(int seed){
+    
 }
 
 void Dictionary::insert(string key) {
