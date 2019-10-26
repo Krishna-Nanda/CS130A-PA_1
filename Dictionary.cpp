@@ -31,13 +31,34 @@ void Dictionary::SecondLevelCollisionResolution(Dictionary::SecondLvlHashTable &
 
 void Dictionary::SecondLvlHashTable::insert_using_H2() {
     vector<string> temp;
-    SecondLevelHashTableLinkedList x;
-    for(int i = 0; i < this->SecondLevelHashTableLinkedList.size(); i++){
+    vector<LL> ll;
+
+    int number_of_bucket = 0;
+    number_of_bucket = SecondLevelHashTableLinkedList.size();
+    number_of_bucket = pow(number_of_bucket, 2);
+    number_of_bucket = ceil(log2(number_of_bucket));
+    int total_buckets = pow(2, number_of_bucket);
+    ll.resize(total_buckets);
+
+
+    for (int i = 0; i < this->SecondLevelHashTableLinkedList.size(); i++) {
         temp.push_back(this->SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level[0]);
     }
-    for(int i = 0; i < temp.size(); i++){
 
+    for (int i = 0; i < temp.size(); i++) {
+        int index = secondHash(temp[i]);
+        ll[index].vector_of_strings_on_second_level.push_back(temp[i]);
     }
+    SecondLevelHashTableLinkedList = ll;
+}
+
+void Dictionary::SecondLvlHashTable::check_collisions() {
+    for(int i = 0; i < SecondLevelHashTableLinkedList.size(); i++){
+        if(SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level.size() > 1){
+            collision = true;
+        }
+    }
+    collision = false;
 }
 
 void Dictionary::SecondLvlHashTable::generateH2(int seed) {
