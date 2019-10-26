@@ -30,6 +30,10 @@ public:
         matrix H2_matrix;
         bool collision;
         bool is_empty;
+        void generateH2(int seed);
+        int secondHash(string key);
+        void insert_using_H2();
+        void check_collisions();
     };
 
     void generateH(int seed);
@@ -41,10 +45,7 @@ public:
     void checkSum();
 
     void SecondLevelCollisionResolution(SecondLvlHashTable& s);
-    int secondHash(string key);
-    void generateH2(int seed,SecondLvlHashTable& s);
-    void insert_using_H2(matrix H2, SecondLvlHashTable& s);
-    void check_collisions(SecondLvlHashTable& s);
+
 
 
 

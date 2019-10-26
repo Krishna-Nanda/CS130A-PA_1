@@ -20,6 +20,34 @@ while(!checksum){
     }
 }
 
+void Dictionary::SecondLevelCollisionResolution(Dictionary::SecondLvlHashTable &s) {
+    mt19937 rand(time(NULL));
+    while(s.collision){
+        s.generateH2(rand());
+        s.insert_using_H2();
+        s.check_collisions();
+    }
+}
+
+void Dictionary::SecondLvlHashTable::generateH2(int seed) {
+    mt19937 random(seed);
+    matrix h;
+   int elements = this->SecondLevelHashTableLinkedList.size();
+   int rows;
+   elements = pow(elements,2);
+   elements = ceil(log2(elements));
+   rows = pow(2,elements);
+
+   for(int i = 0; i < rows; i++){
+       vector<int> row;
+       for(int j = 0; j < 55; j++){
+           row.push_back(random() %2 );
+       }
+       h.push_back(row);
+   }
+   H2_matrix = h;
+}
+
 void Dictionary::checkSum() {
     long long check = 0;
     for(int i = 0; i < Table_of_Second_Level.size(); i++){
