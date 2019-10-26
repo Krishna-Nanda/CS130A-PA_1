@@ -20,6 +20,14 @@ while(!checksum){
     }
 }
 
+void Dictionary::checkSum() {
+    long long check = 0;
+    for(int i = 0; i < Table_of_Second_Level.size(); i++){
+        check += Table_of_Second_Level[i].SecondLevelHashTableLinkedList.size();
+    }
+    checksum = check < 4 * elements;
+}
+
 void Dictionary::generateH(int seed){
     mt19937 random(seed);
     matrix h;
@@ -73,6 +81,15 @@ int Dictionary::FirstHash(string key) {
         }
     }
     key_in_binary.push_back(temp_key);
+    matrix temp_H = H_matrix;
+    matrix result = multiply(key_in_binary,temp_H);
+    int index = 0;
+    for(int i = 0; i < result.size();i++){
+        for(int j = 0; j < result[i].size(); j++){
+            index = result[i][j] % 2;
+        }
+    }
+return index;
 }
 
 void Dictionary::insert(string key) {
@@ -89,4 +106,17 @@ bool Dictionary::find(string key) {
 // TODO:: Write this.
 
     return false;
+}
+
+matrix Dictionary::multiply(const matrix &m1, const matrix &m2) {
+    matrix result(m1.size(), vector<int>(m2.at(0).size()));
+
+    for(size_t row = 0; row < result.size(); ++row) {
+        for(size_t col = 0; col < result.at(0).size(); ++col) {
+            for(size_t inner = 0; inner < m2.size(); ++inner) {
+                result.at(row).at(col) += m1.at(row).at(inner) * m2.at(inner).at(col);
+            }
+        }
+    }
+    return result;
 }

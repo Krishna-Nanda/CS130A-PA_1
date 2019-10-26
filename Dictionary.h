@@ -66,6 +66,8 @@ public:
     // Print the buckets (both first and second level) accessed during the operation.
     bool find(string key);
 
+    matrix multiply(const matrix& m1, const matrix &m2);
+
     private:
     vector<SecondLvlHashTable> Table_of_Second_Level;
     matrix H_matrix;
