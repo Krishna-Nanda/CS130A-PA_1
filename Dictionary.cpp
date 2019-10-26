@@ -61,6 +61,28 @@ void Dictionary::SecondLvlHashTable::check_collisions() {
     collision = false;
 }
 
+int Dictionary::SecondLvlHashTable::secondHash(string key) {
+    matrix key_in_binary;
+    string Binary_Key;
+    vector<int> temp_key;
+    for(int i = key.size() - 1; i > key.size() - 9; i--){
+        Binary_Key = bitset<7>(key[i]).to_string();
+        for(int j = 0; j < 7; j++){
+            temp_key.push_back(int(Binary_Key[j]));
+        }
+    }
+    key_in_binary.push_back(temp_key);
+    matrix temp_H = H2_matrix;
+    matrix result = multiply(key_in_binary,temp_H);
+    int index = 0;
+    for(int i = 0; i < result.size();i++){
+        for(int j = 0; j < result[i].size(); j++){
+            index = result[i][j] % 2;
+        }
+    }
+    return index;
+}
+
 void Dictionary::SecondLvlHashTable::generateH2(int seed) {
     mt19937 random(seed);
     matrix h;
