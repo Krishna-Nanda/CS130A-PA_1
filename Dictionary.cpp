@@ -61,9 +61,18 @@ void Dictionary::insert_using_H(int n, string* keys){
 
 int Dictionary::FirstHash(string key) {
     while((int)key.size() < 8){
-        key = key + key;
+        key += key;
     }
-
+    matrix key_in_binary;
+    string Binary_Key;
+    vector<int> temp_key;
+    for(int i = key.size() - 1; i > key.size() - 9; i--){
+        Binary_Key = bitset<7>(key[i]).to_string();
+        for(int j = 0; j < 7; j++){
+            temp_key.push_back(int(Binary_Key[j]));
+        }
+    }
+    key_in_binary.push_back(temp_key);
 }
 
 void Dictionary::insert(string key) {
