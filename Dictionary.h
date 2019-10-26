@@ -29,16 +29,18 @@ public:
         vector<LL> SecondLevelHashTableLinkedList;
         matrix H2_matrix;
         bool collision;
+        bool is_empty;
     };
 
     void generateH(int seed);
 
     int FirstHash(string key);
 
-    void insert_using_H(string* keys);
+    void insert_using_H(int n, string* keys);
 
     void checkSum();
 
+    void SecondLevelCollisionResolution(SecondLvlHashTable& s);
     int secondHash(string key);
     void generateH2(int seed,SecondLvlHashTable& s);
     void insert_using_H2(matrix H2, SecondLvlHashTable& s);
