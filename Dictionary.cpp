@@ -29,6 +29,17 @@ void Dictionary::SecondLevelCollisionResolution(Dictionary::SecondLvlHashTable &
     }
 }
 
+void Dictionary::SecondLvlHashTable::insert_using_H2() {
+    vector<string> temp;
+    SecondLevelHashTableLinkedList x;
+    for(int i = 0; i < this->SecondLevelHashTableLinkedList.size(); i++){
+        temp.push_back(this->SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level[0]);
+    }
+    for(int i = 0; i < temp.size(); i++){
+
+    }
+}
+
 void Dictionary::SecondLvlHashTable::generateH2(int seed) {
     mt19937 random(seed);
     matrix h;
@@ -53,7 +64,7 @@ void Dictionary::checkSum() {
     for(int i = 0; i < Table_of_Second_Level.size(); i++){
         check += Table_of_Second_Level[i].SecondLevelHashTableLinkedList.size();
     }
-    checksum = check < 4 * elements;
+    checksum = check < 4 * number_of_buckets;
 }
 
 void Dictionary::generateH(int seed){

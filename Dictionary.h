@@ -12,6 +12,7 @@ public:
 
     Dictionary(int number_of_elements){
         elements = number_of_elements;
+        number_of_buckets = pow(2,ceil(log2(elements)));
         this->Table_of_Second_Level.resize(pow(2.0,ceil(log2(elements))));
         for(int i = 0; i < pow(2.0,ceil(log2(elements)));i++){
             SecondLvlHashTable s;
@@ -74,6 +75,7 @@ public:
     matrix H_matrix;
     bool checksum;
     int elements;
+    int number_of_buckets;
 };
 
 
