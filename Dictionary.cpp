@@ -19,7 +19,9 @@ while(!checksum){
 }
     // Doing the Second Level Hashing
     for(int i = 0; i < Table_of_Second_Level.size();i++) {
-        if(Table_of_Second_Level[i].collision){
+//        cout << i << endl;
+//        cout << "--------------" << endl; // Lose the terms in SecondLevelCollisions between i =0 and i = 1
+        if(Table_of_Second_Level[i].collision == true){
             SecondLevelCollisionResolution(Table_of_Second_Level[i]);
         }
     }
@@ -27,11 +29,12 @@ while(!checksum){
 
 void Dictionary::SecondLevelCollisionResolution(Dictionary::SecondLvlHashTable &s) {
     mt19937 rand(time(NULL));
-    while(s.collision){
+   while(s.check_collisions()){
+        s.check_collisions();
         s.generateH2(rand());
         s.insert_using_H2();
         s.check_collisions();
-        if(s.collision){
+        if(s.check_collisions() == true){
             s.elements = 0;
         }
     }
@@ -40,7 +43,6 @@ void Dictionary::SecondLevelCollisionResolution(Dictionary::SecondLvlHashTable &
 void Dictionary::SecondLvlHashTable::insert_using_H2() {
     vector<string> temp;
     vector<LL> ll;
-
     for (int i = 0; i < this->SecondLevelHashTableLinkedList.size() && !this->SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level.empty(); i++) {
         for(int j = 0; j < this->SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level.size(); j++) {
             temp.push_back(this->SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level[j]);
@@ -68,16 +70,16 @@ void Dictionary::SecondLvlHashTable::insert_using_H2() {
     SecondLevelHashTableLinkedList = ll;
 }
 
-void Dictionary::SecondLvlHashTable::check_collisions() {
+bool const Dictionary::SecondLvlHashTable::check_collisions() {
     for(int i = 0; i < SecondLevelHashTableLinkedList.size(); i++){
         if(SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level.size() > 1){
             collision = true;
-            return;
+            return collision;
         }
     }
         collision = false;
-        return;
-}
+        return collision;
+    }
 
 int Dictionary::SecondLvlHashTable::secondHash(string key) {
     matrix key_in_binary;
@@ -93,25 +95,33 @@ int Dictionary::SecondLvlHashTable::secondHash(string key) {
     matrix temp_H = H2_matrix;
     matrix result = multiply(key_in_binary,temp_H);
     int index = 0;
-        for(int i = 0; i < SecondLevelHashTableLinkedList.size(); i++){
+        for(int i = 0; i < pow(2,ceil(log2(elements))); i++){
             index += (result[0][i] % 2) * pow(2,double(i));
         }
-    cout << index;
     return index;
+}
+
+int Dictionary::SecondLvlHashTable::element_checker(){
+    int counter = 0;
+    for(int i = 0; i < SecondLevelHashTableLinkedList.size();i++){
+        counter += SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level.size();
+    }
+    return counter;
 }
 
 void Dictionary::SecondLvlHashTable::generateH2(int seed) {
     mt19937 random(seed);
     matrix h;
-   int elements = this->SecondLevelHashTableLinkedList.size();
+   //int elements = this->elements;
    int rows = 0;
-   elements = pow(elements,2);
-   elements = ceil(log2(elements));
-   rows = pow(2,elements);
+   int element = element_checker();
+   element = pow(element,2);
+   element = ceil(log2(element));
+   rows = pow(2,element);
 
    for(int i = 0; i < rows; i++){
        vector<int> row;
-       for(int j = 0; j < 55; j++){
+       for(int j = 0; j < 56; j++){
            row.push_back(random() %2 );
        }
        h.push_back(row);
@@ -120,6 +130,7 @@ void Dictionary::SecondLvlHashTable::generateH2(int seed) {
 }
 
 void Dictionary::checkSum() {
+    checksum = false;
     long long check = 0;
     for(int i = 0; i < Table_of_Second_Level.size(); i++){
         check += pow(Table_of_Second_Level[i].SecondLevelHashTableLinkedList.size(),2);

@@ -32,13 +32,15 @@ public:
     struct SecondLvlHashTable{
         vector<LL> SecondLevelHashTableLinkedList;
         matrix H2_matrix;
-        bool collision;
-        bool is_empty;
+        bool collision = false;
+        bool is_empty = true;
         int elements = 0;
         void generateH2(int seed);
         int secondHash(string key);
         void insert_using_H2();
-        void check_collisions();
+        bool const check_collisions();
+
+        int element_checker();
     };
 
     void generateH(int seed);
