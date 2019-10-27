@@ -12,6 +12,7 @@ int main()
     string strs[] = {"Fred Astaire", "Lauren Bacall", "Brigitte Bardot", "John Belushi", "Ingmar Bergman"};
     int n = 5;
     dict.bulkInsert(n, strs);
+    dict.Print();
 
     // Insert "Humphrey Bogart" into the dictionary.
 //    dict.insert("Humphrey Bogart");

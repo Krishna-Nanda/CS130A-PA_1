@@ -23,15 +23,18 @@ public:
         }
     }
 
+    void Print();
+
     struct LL{
         vector<string> vector_of_strings_on_second_level;
-        int number_of_elements;
+        int number_of_elements = 0;
     };
     struct SecondLvlHashTable{
         vector<LL> SecondLevelHashTableLinkedList;
         matrix H2_matrix;
         bool collision;
         bool is_empty;
+        int elements = 0;
         void generateH2(int seed);
         int secondHash(string key);
         void insert_using_H2();
