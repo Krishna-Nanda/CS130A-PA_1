@@ -5,6 +5,7 @@
 #include <chrono>
 #include <random>
 #include <bitset>
+#include <iostream>
 using namespace std;
 typedef vector<vector < int > > matrix;
 class Dictionary {

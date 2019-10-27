@@ -6,7 +6,7 @@ using namespace std;
 int main()
 {
     // Initialize the dictionary.
-    Dictionary dict;
+    Dictionary dict(5);
 
     // BulkInsert the keys into the dictionary.
     string strs[] = {"Fred Astaire", "Lauren Bacall", "Brigitte Bardot", "John Belushi", "Ingmar Bergman"};
@@ -14,16 +14,16 @@ int main()
     dict.bulkInsert(n, strs);
 
     // Insert "Humphrey Bogart" into the dictionary.
-    dict.insert("Humphrey Bogart");
-
-    // Remove "Lauren Bacall" from the dictionary.
-    dict.remove("Lauren Bacall");
-
-    // Find "Fred Astaire" in the dictionary.
-    cout << dict.find("Fred Astaire") << endl;
-
-    // Find "Lauren Bacall" in the dictionary.
-    cout << dict.find("Lauren Bacall") << endl;
+//    dict.insert("Humphrey Bogart");
+//
+//    // Remove "Lauren Bacall" from the dictionary.
+//    dict.remove("Lauren Bacall");
+//
+//    // Find "Fred Astaire" in the dictionary.
+//    cout << dict.find("Fred Astaire") << endl;
+//
+//    // Find "Lauren Bacall" in the dictionary.
+//    cout << dict.find("Lauren Bacall") << endl;
 
     return 0;
 }

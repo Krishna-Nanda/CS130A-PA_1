@@ -10,7 +10,12 @@ srand(time(nullptr));
 while(!checksum){
     generateH(random());
     insert_using_H(n,keys);
+    cout << "before checksum" << endl;
     checkSum();
+    if(!checksum){
+        this->Table_of_Second_Level.clear();
+        this->Table_of_Second_Level.resize(number_of_buckets);
+    }
 }
     // Doing the Second Level Hashing
     for(int i = 0; i < Table_of_Second_Level.size();i++) {
@@ -105,7 +110,7 @@ void Dictionary::SecondLvlHashTable::generateH2(int seed) {
 void Dictionary::checkSum() {
     long long check = 0;
     for(int i = 0; i < Table_of_Second_Level.size(); i++){
-        check += Table_of_Second_Level[i].SecondLevelHashTableLinkedList.size();
+        check += pow(Table_of_Second_Level[i].SecondLevelHashTableLinkedList.size(),2);
     }
     checksum = check < 4 * number_of_buckets;
 }
