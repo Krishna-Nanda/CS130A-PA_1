@@ -18,14 +18,12 @@ while(!checksum){
         this->Table_of_Second_Level.resize(number_of_buckets);
     }
 }
-int counter_2 = 0;
 
     // Doing the Second Level Hashing
     for(int i = 0; i < Table_of_Second_Level.size();i++) {
+        Table_of_Second_Level[i].check_collisions();
         if(Table_of_Second_Level[i].collision == true){
-            Table_of_Second_Level[i].generateH2();
             SecondLevelCollisionResolution(Table_of_Second_Level[i]);
-            counter_2++;
         }
     }
     cout << "First Level Hash Function: " << endl;
@@ -35,40 +33,43 @@ int counter_2 = 0;
         }
         cout << endl;
     }
-
-    cout << "Hash Function for Each Second Level Bucket: " << endl;
-    for(int i = 0; i < Table_of_Second_Level.size(); i++){
-        if(!Table_of_Second_Level[i].is_empty){
-            cout << "Bucket number: " << i << endl;
-                for(int j = 0; j < 56; j++){
-                    cout << H_matrix[0][j];
-                }
-                cout << endl;
-                cout << "--------------------" << endl;
-            }
-        }
     cout << "Sum of Squares mapped to every bin: " << check_final << endl;
     cout << "Number of trials needed to generate First Level Hash: " << counter << endl;
-    cout << "Number of times needed to generate Second Level Hash for each bucket: " << counter_2 << endl;
+
+    for(int i = 0; i < Table_of_Second_Level.size(); i++){
+        if(Table_of_Second_Level[i].SecondLevelHashTableLinkedList.size() > 1){
+            cout << "Bucket number: " << i << endl;
+            cout << "Number of iterations of H2 generater: " << Table_of_Second_Level[i].counter_of_H2 << endl;
+                for(int j = 0; j < Table_of_Second_Level[i].H2_matrix.size(); j++) {
+                    for (int x = 0; x < 56; x++) {
+                        cout << Table_of_Second_Level[i].H2_matrix[j][x];
+                    }
+                    cout << endl;
+                }
+
+            }
+        }
     }
 
 
 void Dictionary::SecondLevelCollisionResolution(Dictionary::SecondLvlHashTable &s) {
-    while(s.check_collisions()){
-        cout << "in second levl collision reso" << endl;
+bool col = s.check_collisions();
+while(col == true){
         s.generateH2();
+        s.counter_of_H2 += 1;
         s.insert_using_H2();
         s.check_collisions();
-        if(s.check_collisions() == true){
-            s.elements = 0;
-        }
+        col = s.check_collisions();
+//        if(s.check_collisions() == true){
+//            s.elements = 0;
+//        }
     }
 }
 
 void Dictionary::SecondLvlHashTable::insert_using_H2() {
     vector<string> temp;
     vector<LL> ll;
-    for (int i = 0; i < this->SecondLevelHashTableLinkedList.size() && !this->SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level.empty(); i++) {
+    for (int i = 0; i < this->SecondLevelHashTableLinkedList.size();i++) {
         for(int j = 0; j < this->SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level.size(); j++) {
             temp.push_back(this->SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level[j]);
             elements+=1;
@@ -85,26 +86,19 @@ void Dictionary::SecondLvlHashTable::insert_using_H2() {
 
     for (int i = 0; i < temp.size(); i++) {
         int index = secondHash(temp[i]);
-        if(index == 1){
-            ll[0].vector_of_strings_on_second_level.push_back(temp[i]);
-        }
-        else{
         ll[index].vector_of_strings_on_second_level.push_back(temp[i]);
         }
-    }
     SecondLevelHashTableLinkedList = ll;
 }
 
 bool const Dictionary::SecondLvlHashTable::check_collisions() {
-    for(int i = 0; i < SecondLevelHashTableLinkedList.size(); i++){
-        if(SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level.size() > 1){
-            collision = true;
-            return collision;
+        for(int i = 0; i < this->SecondLevelHashTableLinkedList.size(); i++){
+            if(this->SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level.size() > 1){
+                return true;
+            }
         }
-    }
-        collision = false;
-        return collision;
-    }
+        return false;
+}
 
 int Dictionary::SecondLvlHashTable::secondHash(string key) {
     matrix key_in_binary;
@@ -135,22 +129,20 @@ int Dictionary::SecondLvlHashTable::element_checker(){
 }
 
 void Dictionary::SecondLvlHashTable::generateH2() {
-    matrix h;
    //int elements = this->elements;
    int rows = 0;
    int element = element_checker();
    element = pow(element,2);
    element = ceil(log2(element));
-   rows = pow(2,element);
+   rows = element;
 
    for(int i = 0; i < rows; i++){
        vector<int> row;
        for(int j = 0; j < 56; j++){
            row.push_back(rand() %2 );
        }
-       h.push_back(row);
+       this->H2_matrix.push_back(row);
    }
-   H2_matrix = h;
 }
 
 void Dictionary::checkSum() {
@@ -168,7 +160,7 @@ void Dictionary::generateH(){
     for(int i = 0; i < ceil(log2(elements)); i++){
         vector<int> row;
         for(int j = 0; j < 56; j++){
-           row.push_back(rand() % 2);
+           row.push_back(random() % 2);
         }
         h.push_back(row);
     }
@@ -183,20 +175,14 @@ void Dictionary::insert_using_H(int n, string* keys){
             LL linked_list; // Creating a LL object to push back
             linked_list.number_of_elements += 1; // updating the LL incrementer
             linked_list.vector_of_strings_on_second_level.push_back(*(keys+i)); // Adding the string to the LL object
-            Table_of_Second_Level[index].SecondLevelHashTableLinkedList.push_back(linked_list); // Pushing the LL object
+            Table_of_Second_Level[index].SecondLevelHashTableLinkedList.push_back(linked_list);  // Pushing the LL object
         }
-        else if(!Table_of_Second_Level[index].collision && !Table_of_Second_Level[index].is_empty){ // If the table has no collisions and is not empty
+        else if(!Table_of_Second_Level[index].collision && Table_of_Second_Level[index].SecondLevelHashTableLinkedList.size() > 0){ // If the table has no collisions and is not empty
             Table_of_Second_Level[index].collision = true;
-            LL linked_list;
-            linked_list.number_of_elements += 1;
-            linked_list.vector_of_strings_on_second_level.push_back(*(keys+i));
-            Table_of_Second_Level[index].SecondLevelHashTableLinkedList.push_back(linked_list);
+            Table_of_Second_Level[index].SecondLevelHashTableLinkedList[0].vector_of_strings_on_second_level.push_back(*(keys+i));
         }
        else if(Table_of_Second_Level[index].collision){ // If the table has a collision and is therefore not empty
-            LL linked_list;
-            linked_list.number_of_elements += 1;
-            linked_list.vector_of_strings_on_second_level.push_back(*(keys+i));
-            Table_of_Second_Level[index].SecondLevelHashTableLinkedList.push_back(linked_list);
+            Table_of_Second_Level[index].SecondLevelHashTableLinkedList[0].vector_of_strings_on_second_level.push_back(*(keys+i));
         }
     }
 }
@@ -230,14 +216,12 @@ int index_2 = Table_of_Second_Level[index].secondHash(key);
 if(!Table_of_Second_Level[index].is_empty){
     Table_of_Second_Level[index].SecondLevelHashTableLinkedList[index_2].vector_of_strings_on_second_level.push_back(key);
     cout << "collision occured" << endl;
-    cout << Table_of_Second_Level[index].SecondLevelHashTableLinkedList[index_2].vector_of_strings_on_second_level.back() << endl;
 }
 else{
     cout << "No collision occured inserted" << endl;
     LL ll;
     ll.vector_of_strings_on_second_level.push_back(key);
     Table_of_Second_Level[index].SecondLevelHashTableLinkedList.push_back(ll);
-    cout << Table_of_Second_Level[index].SecondLevelHashTableLinkedList[index_2].vector_of_strings_on_second_level.back() << endl;
     Table_of_Second_Level[index].is_empty = false;
 }
 }
@@ -249,11 +233,12 @@ void Dictionary::remove(string key) {
         return;
     }
     else{
-        vector<string> x = Table_of_Second_Level[index].SecondLevelHashTableLinkedList[index_2].vector_of_strings_on_second_level;
-        for(int i = 0; i < x.size(); i++){
-            if(x[i] == key){
+        for(int i = 0; i < Table_of_Second_Level[index].SecondLevelHashTableLinkedList.size(); i++){
+            for(int j = 0; j < Table_of_Second_Level[index].SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level.size(); j++)
+            if(Table_of_Second_Level[index].SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level[j] == key){
                 cout << "erased: " << key << endl;
-                x.erase(x.begin()+i);
+                auto e = Table_of_Second_Level[index].SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level.begin();
+                Table_of_Second_Level[index].SecondLevelHashTableLinkedList[i].vector_of_strings_on_second_level.erase(e+j);
             }
         }
     }
@@ -264,22 +249,14 @@ bool Dictionary::find(string key) {
 // TODO:: Write this.
     int index = FirstHash(key);
     int index_2 = Table_of_Second_Level[index].secondHash(key);
-    if (Table_of_Second_Level[index].is_empty) {
-        cout << "This bucket is empty" << endl;
+    cout << "Indexed to First Bucket: " << index << " Indexed to Second Level Bucket: " << index_2 << endl;
+    if (Table_of_Second_Level[index].is_empty || Table_of_Second_Level[index].SecondLevelHashTableLinkedList[index_2].vector_of_strings_on_second_level.size() == 0) {
         return false;
-    }
-    cout << "First Bucket: ";
-    cout << Table_of_Second_Level[index].SecondLevelHashTableLinkedList[0].vector_of_strings_on_second_level[0] << endl;
-    if (Table_of_Second_Level[index].SecondLevelHashTableLinkedList[0].vector_of_strings_on_second_level[0] == key) {
+    };
+    if ((Table_of_Second_Level[index].SecondLevelHashTableLinkedList[0].vector_of_strings_on_second_level[0]) == key) {
         return true;
     } else {
-        cout << "Second Bucket: ";
-        for (int i = 0; i <
-                        Table_of_Second_Level[index].SecondLevelHashTableLinkedList[index_2].vector_of_strings_on_second_level.size(); i++) {
-            if (index_2 == 0) {
-                cout
-                        << Table_of_Second_Level[index].SecondLevelHashTableLinkedList[index_2].vector_of_strings_on_second_level[
-                                i + 1] << endl;
+        for (int i = 0; i < Table_of_Second_Level[index].SecondLevelHashTableLinkedList[index_2].vector_of_strings_on_second_level.size(); i++) {
                 if (Table_of_Second_Level[index].SecondLevelHashTableLinkedList[index_2].vector_of_strings_on_second_level[i] ==
                     key) {
                     return true;
@@ -289,7 +266,6 @@ bool Dictionary::find(string key) {
 
         return false;
     }
-}
 
 matrix Dictionary::multiply(const matrix &m1, const matrix &m2) {
     matrix result(m1.size(), vector<int>(m2.size()));
@@ -301,5 +277,7 @@ matrix Dictionary::multiply(const matrix &m1, const matrix &m2) {
     return result;
 }
 void Dictionary::Print(int index, int index_2) {
+
+
 
 }

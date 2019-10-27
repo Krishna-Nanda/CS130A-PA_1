@@ -9,36 +9,36 @@ using namespace std;
 // Driver program
 //int main()
 //{
-//    // Initialize the dictionary.
+//     //Initialize the dictionary.
 //    Dictionary dict(9);
 //
-//    // BulkInsert the keys into the dictionary.
-//    string strs[] = {"Fred Astaire", "Lauren Bacall", "Brigitte Bardot", "John Belushi", "Ingmar Bergman","Humphrey Bogart","James Cagney","Bette Davis","Henry Fonda"};
+//     //BulkInsert the keys into the dictionary.
+//    string strs[] = {"Fred Astaire", "Lauren Bacall", "Brigitte Bardot", "John Belushi", "Ingmar Bergman","Humphrey Bogart","James Cagney","Bette Davis","Henry Fonda", "Bette Davis"};
 //    int n = 9;
 //    dict.bulkInsert(n, strs);
-//    dict.Print();
+//    //dict.Print();
 //
-//    // Insert "Humphrey Bogart" into the dictionary.
-////    dict.insert("Humphrey Bogart");
-////
-////    // Remove "Lauren Bacall" from the dictionary.
-////    dict.remove("Lauren Bacall");
-////
-////    // Find "Fred Astaire" in the dictionary.
-////    cout << dict.find("Fred Astaire") << endl;
-////
-////    // Find "Lauren Bacall" in the dictionary.
-////    cout << dict.find("Lauren Bacall") << endl;
+//     //Insert "Humphrey Bogart" into the dictionary.
+//    dict.insert("Humphrey Bogart");
+//
+//    // Remove "Lauren Bacall" from the dictionary.
+//    dict.remove("Lauren Bacall");
+//
+//    // Find "Fred Astaire" in the dictionary.
+//    cout << dict.find("Fred Astaire") << endl;
+//
+//    // Find "Lauren Bacall" in the dictionary.
+//    cout << dict.find("Lauren Bacall") << endl;
 //
 //    return 0;
 //}
 int main() {
-    Dictionary Dic(1000);
+    Dictionary Dic(100);
     io::LineReader in("name.basics.tsv");
     vector<string> data;
     int counter = 0;
     int index = 0;
-    string *t = new string[1000];
+    string *t = new string[100];
     while (char *line = in.next_line()) {
         string a = line;
         //boost::erase_all(a, " ");
@@ -49,16 +49,16 @@ int main() {
         //cout << t[index] << endl;
         index++;
         counter++;
-        if (counter == 1000) {
+        if (counter == 100) {
             break;
         }
     }
-    Dic.bulkInsert(1000, t);
+    Dic.bulkInsert(100, t);
     //Dic.Print();
-    cout << "--------------" << endl;
-    Dic.insert("Krishna Nanda");
-    Dic.remove("Albert Yuan");
-    Dic.find("Megan Fox");
+    Dic.insert("Sam Pettus");
+    Dic.find("Sam Pettus");
+    Dic.remove("Sam Pettus");
+    Dic.find("Sam Pettus");
     //Dic.print();
     return 0;
 }

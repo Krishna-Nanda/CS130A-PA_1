@@ -16,12 +16,12 @@ public:
     Dictionary(int number_of_elements){
         elements = number_of_elements;
         number_of_buckets = pow(2,ceil(log2(elements)));
-        this->Table_of_Second_Level.resize(pow(2.0,ceil(log2(elements))));
+        this->Table_of_Second_Level.resize(number_of_buckets);
         for(int i = 0; i < pow(2.0,ceil(log2(elements)));i++){
             SecondLvlHashTable s;
-            this->Table_of_Second_Level.push_back(s);
-            LL ll;
-            this->Table_of_Second_Level[i].SecondLevelHashTableLinkedList.push_back(ll);
+            this->Table_of_Second_Level[i] = s;
+//            LL ll;
+//            this->Table_of_Second_Level[i].SecondLevelHashTableLinkedList.push_back(ll);
         }
     }
 
@@ -37,6 +37,7 @@ public:
         bool collision = false;
         bool is_empty = true;
         int elements = 0;
+        int counter_of_H2 = 0;
         void generateH2();
         int secondHash(string key);
         void insert_using_H2();
