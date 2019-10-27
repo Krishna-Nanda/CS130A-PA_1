@@ -3,9 +3,11 @@
 #include <cmath>
 #include <fstream>
 #include <chrono>
-#include <random>
 #include <bitset>
 #include <iostream>
+#include <ctime>
+#include <cstdlib>
+#include <random>
 using namespace std;
 typedef vector<vector < int > > matrix;
 class Dictionary {
@@ -43,7 +45,7 @@ public:
         int element_checker();
     };
 
-    void generateH(int seed);
+    void generateH();
 
     int FirstHash(string key);
 

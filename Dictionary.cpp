@@ -5,12 +5,11 @@ using namespace std;
 
 
 void Dictionary::bulkInsert(int n, string *keys) {
-checksum = false;
-srand(time(nullptr));
+    srand(time(NULL));
+    checksum = false;
 while(!checksum){
-    generateH(random());
+    generateH();
     insert_using_H(n,keys);
-    cout << "before checksum" << endl;
     checkSum();
     if(!checksum){
         this->Table_of_Second_Level.clear();
@@ -28,7 +27,6 @@ while(!checksum){
 }
 
 void Dictionary::SecondLevelCollisionResolution(Dictionary::SecondLvlHashTable &s) {
-    mt19937 rand(time(NULL));
    while(s.check_collisions()){
         s.check_collisions();
         s.generateH2(rand());
@@ -110,7 +108,6 @@ int Dictionary::SecondLvlHashTable::element_checker(){
 }
 
 void Dictionary::SecondLvlHashTable::generateH2(int seed) {
-    mt19937 random(seed);
     matrix h;
    //int elements = this->elements;
    int rows = 0;
@@ -122,7 +119,7 @@ void Dictionary::SecondLvlHashTable::generateH2(int seed) {
    for(int i = 0; i < rows; i++){
        vector<int> row;
        for(int j = 0; j < 56; j++){
-           row.push_back(random() %2 );
+           row.push_back(rand() %2 );
        }
        h.push_back(row);
    }
@@ -135,16 +132,17 @@ void Dictionary::checkSum() {
     for(int i = 0; i < Table_of_Second_Level.size(); i++){
         check += pow(Table_of_Second_Level[i].SecondLevelHashTableLinkedList.size(),2);
     }
+    cout << check << " CheckSum" << endl;
+    cout << 4*number_of_buckets << " 4N" << endl;
     checksum = check < 4 * number_of_buckets;
 }
 
-void Dictionary::generateH(int seed){
-    mt19937 random(seed);
+void Dictionary::generateH(){
     matrix h;
     for(int i = 0; i < ceil(log2(elements)); i++){
         vector<int> row;
-        for(int j = 0; j < 55; j++){
-           row.push_back(random() % 2);
+        for(int j = 0; j < 56; j++){
+           row.push_back(rand() % 2);
         }
         h.push_back(row);
     }
@@ -187,18 +185,16 @@ int Dictionary::FirstHash(string key) {
     for(int i = key.size() - 1; i > key.size() - 9; i--){
         Binary_Key = bitset<7>(key[i]).to_string();
         for(int j = 0; j < 7; j++){
-            temp_key.push_back(int(Binary_Key[j]));
+            temp_key.push_back(int(Binary_Key[j]) - (int)'0');
         }
     }
     key_in_binary.push_back(temp_key);
     matrix temp_H = H_matrix;
     matrix result = multiply(key_in_binary,temp_H);
     int index = 0;
-    for(int i = 0; i < result.size();i++){
-        for(int j = 0; j < result[i].size(); j++){
-            index = result[i][j] % 2;
+        for(int j = 0; j < result[0].size(); j++){
+            index += (result[0][j] % 2) * pow(2,j);
         }
-    }
 return index;
 }
 
@@ -219,13 +215,11 @@ bool Dictionary::find(string key) {
 }
 
 matrix Dictionary::multiply(const matrix &m1, const matrix &m2) {
-    matrix result(m1.size(), vector<int>(m2.at(0).size()));
-    for(size_t row = 0; row < result.size(); ++row) {
-        for(size_t col = 0; col < result.at(0).size(); ++col) {
-            for(size_t inner = 0; inner < m2.size(); ++inner) {
-                result.at(row).at(col) += m1.at(row).at(inner) * m2.at(inner).at(col);
+    matrix result(m1.size(), vector<int>(m2.size()));
+    for(size_t row = 0; row < m2.size(); row++) {
+            for(size_t inner = 0; inner < m1.at(0).size(); inner++) {
+                result.at(0).at(row) += m1.at(0).at(inner) * m2.at(row).at(inner);
             }
-        }
     }
     return result;
 }
