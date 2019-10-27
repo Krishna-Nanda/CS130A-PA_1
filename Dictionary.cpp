@@ -215,8 +215,22 @@ else{
 }
 }
 void Dictionary::remove(string key) {
-// TODO:: Write this.
-
+    int index = FirstHash(key);
+    int index_2 = Table_of_Second_Level[index].secondHash(key);
+    if(Table_of_Second_Level[index].is_empty){
+        cout << "Table Empty" << endl;
+        return;
+    }
+    else{
+        vector<string> x = Table_of_Second_Level[index].SecondLevelHashTableLinkedList[index_2].vector_of_strings_on_second_level;
+        for(int i = 0; i < x.size(); i++){
+            if(x[i] == key){
+                cout << "erased: " << key << endl;
+                x.erase(x.begin()+i);
+            }
+        }
+    }
+    return;
 }
 
 bool Dictionary::find(string key) {

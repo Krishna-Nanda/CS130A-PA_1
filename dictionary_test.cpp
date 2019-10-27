@@ -57,6 +57,7 @@ int main() {
     Dic.Print();
     cout << "--------------" << endl;
     Dic.insert("Krishna Nanda");
+    Dic.remove("Albert Yuan");
     //Dic.print();
     return 0;
 }
