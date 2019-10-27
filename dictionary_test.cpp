@@ -54,10 +54,11 @@ int main() {
         }
     }
     Dic.bulkInsert(1000, t);
-    Dic.Print();
+    //Dic.Print();
     cout << "--------------" << endl;
     Dic.insert("Krishna Nanda");
     Dic.remove("Albert Yuan");
+    Dic.find("Megan Fox");
     //Dic.print();
     return 0;
 }

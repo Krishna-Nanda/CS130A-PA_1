@@ -25,7 +25,7 @@ public:
         }
     }
 
-    void Print();
+    void Print(int index, int index_2);
 
     struct LL{
         vector<string> vector_of_strings_on_second_level;
