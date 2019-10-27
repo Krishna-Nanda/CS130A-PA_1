@@ -6,8 +6,10 @@ using namespace std;
 
 void Dictionary::bulkInsert(int n, string *keys) {
     srand(time(NULL));
+    int counter = 0;
     checksum = false;
 while(!checksum){
+    counter++;
     generateH();
     insert_using_H(n,keys);
     checkSum();
@@ -16,20 +18,45 @@ while(!checksum){
         this->Table_of_Second_Level.resize(number_of_buckets);
     }
 }
+int counter_2 = 0;
+
     // Doing the Second Level Hashing
     for(int i = 0; i < Table_of_Second_Level.size();i++) {
-//        cout << i << endl;
-//        cout << "--------------" << endl; // Lose the terms in SecondLevelCollisions between i =0 and i = 1
         if(Table_of_Second_Level[i].collision == true){
+            Table_of_Second_Level[i].generateH2();
             SecondLevelCollisionResolution(Table_of_Second_Level[i]);
+            counter_2++;
         }
     }
-}
+    cout << "First Level Hash Function: " << endl;
+    for(int i = 0; i < H_matrix.size(); i++){
+        for(int j = 0; j < 56; j++){
+            cout << H_matrix[i][j];
+        }
+        cout << endl;
+    }
+
+    cout << "Hash Function for Each Second Level Bucket: " << endl;
+    for(int i = 0; i < Table_of_Second_Level.size(); i++){
+        if(!Table_of_Second_Level[i].is_empty){
+            cout << "Bucket number: " << i << endl;
+                for(int j = 0; j < 56; j++){
+                    cout << H_matrix[0][j];
+                }
+                cout << endl;
+                cout << "--------------------" << endl;
+            }
+        }
+    cout << "Sum of Squares mapped to every bin: " << check_final << endl;
+    cout << "Number of trials needed to generate First Level Hash: " << counter << endl;
+    cout << "Number of times needed to generate Second Level Hash for each bucket: " << counter_2 << endl;
+    }
+
 
 void Dictionary::SecondLevelCollisionResolution(Dictionary::SecondLvlHashTable &s) {
-   while(s.check_collisions()){
-        s.check_collisions();
-        s.generateH2(rand());
+    while(s.check_collisions()){
+        cout << "in second levl collision reso" << endl;
+        s.generateH2();
         s.insert_using_H2();
         s.check_collisions();
         if(s.check_collisions() == true){
@@ -107,7 +134,7 @@ int Dictionary::SecondLvlHashTable::element_checker(){
     return counter;
 }
 
-void Dictionary::SecondLvlHashTable::generateH2(int seed) {
+void Dictionary::SecondLvlHashTable::generateH2() {
     matrix h;
    //int elements = this->elements;
    int rows = 0;
@@ -132,8 +159,7 @@ void Dictionary::checkSum() {
     for(int i = 0; i < Table_of_Second_Level.size(); i++){
         check += pow(Table_of_Second_Level[i].SecondLevelHashTableLinkedList.size(),2);
     }
-    cout << check << " CheckSum" << endl;
-    cout << 4*number_of_buckets << " 4N" << endl;
+    check_final = check;
     checksum = check < 4 * number_of_buckets;
 }
 

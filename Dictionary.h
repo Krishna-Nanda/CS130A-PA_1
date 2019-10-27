@@ -37,7 +37,7 @@ public:
         bool collision = false;
         bool is_empty = true;
         int elements = 0;
-        void generateH2(int seed);
+        void generateH2();
         int secondHash(string key);
         void insert_using_H2();
         bool const check_collisions();
@@ -84,6 +84,7 @@ public:
     bool checksum;
     int elements;
     int number_of_buckets;
+    long long check_final;
 };
 
 
