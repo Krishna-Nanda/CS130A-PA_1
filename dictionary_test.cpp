@@ -33,12 +33,12 @@ using namespace std;
 //    return 0;
 //}
 int main() {
-    Dictionary Dic(10000);
+    Dictionary Dic(1000);
     io::LineReader in("name.basics.tsv");
     vector<string> data;
     int counter = 0;
     int index = 0;
-    string *t = new string[10000];
+    string *t = new string[1000];
     while (char *line = in.next_line()) {
         string a = line;
         //boost::erase_all(a, " ");
@@ -49,12 +49,14 @@ int main() {
         //cout << t[index] << endl;
         index++;
         counter++;
-        if (counter == 10000) {
+        if (counter == 1000) {
             break;
         }
     }
-    Dic.bulkInsert(10000, t);
+    Dic.bulkInsert(1000, t);
     Dic.Print();
+    cout << "--------------" << endl;
+    Dic.insert("Krishna Nanda");
     //Dic.print();
     return 0;
 }

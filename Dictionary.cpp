@@ -199,10 +199,21 @@ return index;
 }
 
 void Dictionary::insert(string key) {
-// TODO:: Write this.
-
+int index = FirstHash(key);
+int index_2 = Table_of_Second_Level[index].secondHash(key);
+if(!Table_of_Second_Level[index].is_empty){
+    Table_of_Second_Level[index].SecondLevelHashTableLinkedList[index_2].vector_of_strings_on_second_level.push_back(key);
+    cout << "collision occured" << endl;
+    cout << Table_of_Second_Level[index].SecondLevelHashTableLinkedList[index_2].vector_of_strings_on_second_level.back() << endl;
 }
-
+else{
+    cout << "No collision occured inserted" << endl;
+    LL ll;
+    ll.vector_of_strings_on_second_level.push_back(key);
+    Table_of_Second_Level[index].SecondLevelHashTableLinkedList.push_back(ll);
+    cout << Table_of_Second_Level[index].SecondLevelHashTableLinkedList[index_2].vector_of_strings_on_second_level.back() << endl;
+}
+}
 void Dictionary::remove(string key) {
 // TODO:: Write this.
 
